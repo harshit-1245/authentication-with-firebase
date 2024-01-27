@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "711615931481",
+    "project_id": "learning-firebase-47175",
+    "storage_bucket": "learning-firebase-47175.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711615931481:android:62db15380ca247a22efd48",
+        "android_client_info": {
+          "package_name": "com.harshit1245.authentication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgNvWi4ll3OdSbaO2xIcxcfd9tECKoRFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
