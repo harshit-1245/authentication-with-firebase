@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button as PaperButton, TextInput as PaperTextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import useAuthStore from '../src/loginAuthStore';
+import axios from "axios"
 
 const LoginScreen = () => {
   const { isPasswordShown, isEmailModalVisible, isForgotPasswordModalVisible, forgotPasswordEmail, setField, togglePasswordVisibility, setIsEmailModalVisible, setIsForgotPasswordModalVisible, setForgotPasswordEmail } = useAuthStore();
@@ -11,10 +12,31 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleEmailLogin = () => {
-    console.log('Email Login:', email, password);
-    setIsEmailModalVisible(false);
+  const handleEmailLogin = async () => {
+    try {
+      const response = await axios.post(
+        'http://192.168.29.163:4000/login', // Replace with your server endpoint
+        {
+          email: email,
+          password: password,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+     
+
+      // If the login was successful, you might want to navigate to another screen or perform additional actions.
+    } catch (error) {
+      console.error('API error:', error.response.data);
+
+      // Handle the error, display an error message, or perform other actions.
+    }
   };
+  
 
   const handleNavigation = () => {
     navigation.navigate('Mobile');

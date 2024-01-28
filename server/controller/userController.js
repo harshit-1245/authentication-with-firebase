@@ -1,8 +1,9 @@
 const asyncHandler=require("express-async-handler")
+const bcrypt=require("bcrypt")
 const User = require( "../models/userModel" )
 
 const { ApiResponse } = require( "../utils/ApiResponse" )
-const { validateRegistration } = require( "../configuration/validation" )
+const { validateRegistration, validateLogin } = require( "../configuration/validation" )
 
 
 
@@ -51,4 +52,41 @@ const register=asyncHandler(async(req,res)=>{
     }
 })
 
-module.exports={getUser,register}
+const loginUser = asyncHandler(async (req, res) => {
+    try {
+      // Validate the request body against the login schema
+      const { error } = validateLogin(req.body);
+  
+      if (error) {
+        // Validation failed
+        return res.status(400).json({ message: 'Validation error', errors: error.details.map(d => d.message) });
+      }
+  
+      // Destructure user input
+      const { email, password } = req.body;
+  
+      // Find the user based on email
+      const user = await User.findOne({ email });
+  
+      // Check if the user exists
+      if (!user) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+  
+      // Validate the password
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+  
+      if (!isPasswordValid) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
+  
+      // Generate authentication token
+      const authToken = await user.generateAuthToken();
+  
+      res.status(200).json(new ApiResponse(200, { user, authToken }, "Login successful"));
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Something went wrong during login" });
+    }
+  });
+module.exports={getUser,register,loginUser}
